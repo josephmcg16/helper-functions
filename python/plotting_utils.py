@@ -54,3 +54,33 @@ def plot_trajectory(trajectory):
               marker='*', markersize=7)
     axes.plot(trajectory[:, 0], trajectory[:, 1], trajectory[:, 2])
     return fig, axes
+
+
+def hexcolor(value, max_value):
+    """Returns Hex scale of RGB values for a generic value
+
+    Example:
+    `
+    values = range(10)
+    colors = [hexcolor(value, values.max()) for value in values]
+    `
+
+    Args:
+        value (float, int): Generic value to be converted
+        max_value (float, int): Maximum value of the range of values which value belongs to.
+
+    Returns:
+        str: Hex code of RGB values.
+    """
+    value = value / max_value * 100
+
+    if value <= 50:
+        r = 255
+        g = int(255*value/50)
+        b = 0
+    else:
+        r = int(255*(100-value)/50)
+        g = 255
+        b = 0
+
+    return "#%s%s%s" % tuple([hex(c)[2:].rjust(2, "0") for c in (r, g, b)])
