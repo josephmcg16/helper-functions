@@ -4,6 +4,8 @@ from scipy.interpolate import griddata
 
 import matplotlib.pyplot as plt
 
+import plotly.graph_objects as go
+
 
 def grid_matrices3D(arr, n_points):
     """Return interpolated grid arrays from samples of a 3D array.
@@ -84,3 +86,33 @@ def hexcolor(value, max_value):
         b = 0
 
     return "#%s%s%s" % tuple([hex(c)[2:].rjust(2, "0") for c in (r, g, b)])
+
+
+def plotly_trajectories_3d(data_matrix, BGCOLOR="#1E1E1E"):
+    """Plot multiple trajectories of time series 3-dimensional data.
+
+    Args:
+        data_matrix (np.ndarray): Data matrix to plot. 
+        Shape is (number of trajectories, number of time points, number of spatial dimensions)
+        BGCOLOR (string): Hex string of the background color of plotly figure. Defaults to dark mode.
+
+    Returns:
+        fig (plotly.graph_objs._figure.Figure): Plotly graph object with the 3D plot of the data matrix.
+    """
+    fig = go.Figure()
+    for i, traj in enumerate(data_matrix):
+      fig.add_trace(
+          go.Scatter3d(x=traj[:, 0], y=traj[:, 1], z=traj[:, 2],
+                      mode="lines", name=f"Trajectory {i+1}")
+      )
+    fig.update_layout(
+        margin=dict(l=0, r=0, t=0, b=0),
+        template='plotly_dark',
+        paper_bgcolor=BGCOLOR,
+        legend=dict(
+          yanchor="top",
+          y=1,
+          xanchor="left",
+          x=0)
+      )
+    return fig
